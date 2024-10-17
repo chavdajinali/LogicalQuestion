@@ -1,0 +1,397 @@
+
+Q.. Write a function to reverse a string in Swift.
+String("jinali".reversed())
+Q.. write a sentence in reverse format in swift.
+func reverseSentence(_ sentence: String) -> String { // Split the sentence into an array of words
+    let words = sentence.split(separator: " ") // Reverse the array of words
+    let reversedWords = words.reversed() // Join the reversed words into a new sentence
+    let reversedSentence = reversedWords.joined(separator: " ")
+    return reversedSentence
+} // Example usage
+
+let sentence = "i am programmer"
+let reversed = reverseSentence(sentence)
+print(reversed)
+Q..How would you implement a simple cache mechanism for network responses?
+
+enum NetworkError: Error {
+    case invalidURL
+    case networkError
+    case parsingError
+}
+
+class NetworkCache {
+    private var cache = [String: Any]()
+
+    func fetchAndCacheData(url: String) async throws -> Any? {
+        if let cachedData = cache[url] {
+            return cachedData
+        }
+
+        let (data, _) = try await URLSession.shared.data(from: URL(string: url)!)
+        guard let jsonData = try? JSONSerialization.jsonObject(with: data, options: []) else {
+            throw NetworkError.parsingError // Define your own NetworkError type
+        }
+
+        cache[url] = jsonData
+        return jsonData
+    }
+}
+
+Q. Find the Largest Element in an Array
+func findLargestElement(in array: [Int]) -> Int? {
+    return array.max()
+ }
+
+Q..Check for Balanced Parentheses
+
+func areParenthesesBalanced(_ s: String) -> Bool {
+    var stack = [Character]()
+    for char in s {
+        if char == "(" {
+            stack.append(char)
+        } else if char == ")" {
+            if stack.isEmpty {
+                return false
+            }
+            stack.popLast()
+        }
+    }
+    return stack.isEmpty
+}
+
+Q. Fibonacci Sequence
+func fibonacci(_ n: Int) -> Int {
+    guard n > 1 else { return n }
+    return fibonacci(n - 1) + fibonacci(n - 2)
+}
+
+print(fibonacci(6))
+
+O/P —8
+Q.Given two sorted arrays, merge them into a single sorted array.
+
+func mergedTwoSortedArr(_ arr1:[Int],_ arr2:[Int]) -> [Int] {
+    var result = arr1 + arr2
+    return result.sorted(by: <)
+}
+
+print(mergedTwoSortedArr([1,4,5,6,9], [2,10,15,16,17]))
+
+O/P — [1, 2, 4, 5, 6, 9, 10, 15, 16, 17]
+
+Q.Find the Missing Number
+
+func findMissingNumbers(_ nums: [Int]) -> [Int] {
+    var result = [Int]()
+    for i in 0..<nums.count - 1 {
+        if nums[i] + 1 != nums[i+1] {
+            for i in (nums[i]+1)..<nums[i+1] {
+                result.append(i)
+            }
+        }
+    }
+    return result
+}
+
+print(findMissingNumbers([1,4,6,8,9,12,15]))
+
+O/P — [2, 3, 5, 7, 10, 11, 13, 14]
+
+//find the missing value
+
+findMissingValue()
+
+func findMissingValue() {
+    var arrMissing = [18,2,3,6,8,10,15]
+    
+    arrMissing = sortArray(arr: &arrMissing)
+    print(arrMissing)
+    
+    let first  = arrMissing.first ?? 0
+    let last = arrMissing.last ?? 0
+    
+    let result = Array(first...last)
+    let missingValue = result.filter({!arrMissing.contains($0)})
+        
+    print(missingValue)
+}
+
+Q. Plus Two Array
+
+//plus two arrays
+PlusTwoArray()
+
+func PlusTwoArray() {
+    let arr1 = [-1,5,6,7,8]
+    let arr2 = [-2,4,5,6]
+    
+    let arr1Size = arr1.count
+    let arr2Size = arr2.count
+    
+    var result = [Int]()
+    
+    let MaxCount =  max(arr1Size, arr2Size)
+    
+    for i in 0..<MaxCount {
+        result.append(i < arr2.count ? (arr1[i]+arr2[i]) : arr1[i])
+    }
+    
+    print(result)
+}
+
+Q.Implement binary search to find the index of a target value in a sorted array.
+
+func binarySearch(_ array: [Int], target: Int) -> Int? {
+    var left = 0
+    var right = array.count - 1
+    
+    while left <= right {
+        let mid = left + (right - left) / 2
+        if array[mid] == target {
+            return mid
+        } else if array[mid] < target {
+            left = mid + 1
+        } else {
+            right = mid - 1
+        }
+    }
+    
+    return nil
+}
+
+print(binarySearch([1,3,4,5,6,7,8],target: 5))
+
+O/P : 3 //position
+
+Q.. Write a function to check if a given string is a palindrome.
+
+func isPalindrome(_ s: String) -> Bool {
+    let cleanedString = s.lowercased().filter { $0.isLetter }
+    return cleanedString == String(cleanedString.reversed())
+}
+
+print(isPalindrome("jinali")) // false
+print(isPalindrome(“maam”)) // true
+
+Q..Given two arrays, find the intersection of the two arrays.
+
+func intersect(_ nums1: [Int], _ nums2: [Int]) -> [Int] {
+    var numCount = [Int: Int]()
+    var result = [Int]()
+    
+    for num in nums1 {
+        numCount[num, default: 0] += 1
+    }
+    
+    for num in nums2 {
+        if let count = numCount[num], count > 0 {
+            result.append(num)
+            numCount[num] = count - 1
+        }
+    }
+    
+    return result
+}
+print(intersect([1,3,4,5,6,7], [4,6,7,9,12])) // [4,6,7]
+
+Q..Given an unsorted integer array, find the smallest missing positive integer.
+
+
+func firstMissingPositive(_ nums: [Int]) -> [Int] {
+    var n = nums
+    var missingValue:Int?
+    n.sort(by: <)
+    
+    var result = [Int]()
+    for i in 0..<n.count - 1 {
+        if n[i] + 1 != n[i+1] {
+            for i in (n[i]+1)..<n[i+1] {
+                result.append(i)
+            }
+        }
+    }
+    return result
+}
+
+print(firstMissingPositive([-1,1,2,3,4,6,8]).first) // 0
+print(firstMissingPositive([-1,0,1,2,3,4,6,8]).first) // 5
+
+func firstMissingValue(_ nums: inout[Int]) -> [Int] {
+	nums.sort(by:<)
+	let first = nums.first
+	let last = nums.last
+
+	let arr = Array(first…last)
+	let missingValue = arr.filter({ !nums.contains($0) })
+	return missingValue
+}
+
+
+Q.Remove Duplicate Values
+
+//remove duplicate from the array
+var arr = [1,4,4,2,3,5,6,2,8,9]
+removeDuplicate()
+
+print(Set(arr))
+
+func removeDuplicate() {
+    print(arr)
+    var newArr = [Int]()
+    for i in 0..<arr.count - 1 {
+        if newArr.contains(arr[i]) == false {
+            newArr.append(arr[i])
+        }
+    }
+    print(newArr)
+}
+
+Q.. Replace Ocuurance Character with emoji
+
+func replaceOccuranceCharacter() {
+    var newstr = "JinaliMilan"
+    var replacingChar = "😇"
+    var replacedStr = ""
+    var charcount = [Character:Int]()
+    
+    for character in newstr {
+        if let count = charcount[character] {
+            charcount[character] = count + 1
+        } else {
+            charcount[character] = 1
+        }
+    }
+    
+    for character in newstr {
+        if charcount[character]! > 1 {
+            replacedStr += replacingChar
+        } else {
+            replacedStr.append(character)
+        }
+    }
+    
+    print("\(replacedStr)")
+    
+    // find first duplicate from the string
+    let max = charcount.sorted(by: >)
+    print(max.first ?? "")
+}
+
+Q.Find Middle Element
+
+//Find the Middle Element
+findMiddleElement([1,3,4,5,6,7,8])
+func findMiddleElement(_ arr:[Int]) {
+    let middsize = arr.count/2
+    print(arr[middsize])
+}
+ 
+
+Q.Maximum SubArray Sum
+
+let maxSum = maximumSubarraySum(nums: [-2, 1, -3, 4, -1, 2, 1, -5, 4])
+print("Maximum subarray sum: \(maxSum)")
+
+func maximumSubarraySum(nums: [Int]) -> Int {
+    var maxSum = nums.first!
+    var currentSum = nums.first!
+
+    for i in 1..<nums.count {
+        currentSum = max(currentSum + nums[i], nums[i])
+        maxSum = max(maxSum, currentSum)
+    }
+
+    return maxSum
+}
+
+Q. Find longest common prefix
+
+//Longest common prefix
+print(longestCommonPrefix(strarr:["flower","flow","float"]))
+
+func longestCommonPrefix(strarr: [String]) -> String {
+    if strarr.isEmpty{
+        return "There is no string."
+    }
+    
+    var prefix = strarr[0]
+    
+    for str in strarr {
+            while !str.hasPrefix(prefix)
+     && prefix.count > 0 {
+                prefix.removeLast()
+            }
+        }
+
+        return prefix
+    
+}
+
+
+Q. Sort array
+
+//sort the array
+var newarr = [1,99,100,67,45,32,90,89,-1,-4]
+
+sortArray(arr: &newarr)
+
+func sortArray( arr:inout [Int]) -> [Int] {
+    
+    for i in 0..<arr.count {
+        for j in 0..<arr.count {
+            if arr[j] > arr[i] {
+                let temp = arr[j]
+                arr[j] = arr[i]
+                arr[i] = temp
+            }
+        }
+    }
+    return arr
+    print(arr)
+    
+}
+
+Q. Find Longest common Subsequence
+
+//Find the Longest Common Subsequence
+findtheLogestCommonSubsequence()
+func findtheLogestCommonSubsequence() {
+    let str = "ABCDEFGABCDYKOLABCDYKPLOABCPLOABCDEFG"
+    let str2 = "ABCPLOABCDEFGKOLABCDYKPLO"
+    
+    let strSize = str.count
+    let str2Size = str2.count
+    
+    var dp = Array(repeating: Array(repeating: 0, count: str2Size + 1), count: strSize + 1)
+    
+    // Fill the dp array in a bottom-up manner
+    for i in 1...strSize {
+        for j in 1...str2Size {
+            if str[str.index(str.startIndex, offsetBy: i - 1)] == str2[str2.index(str2.startIndex, offsetBy: j - 1)] {
+                dp[i][j] = dp[i - 1][j - 1] + 1
+            } else {
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+            }
+        }
+    }
+
+    // Reconstruct the LCS from the dp array
+    var lcs = ""
+    var i = strSize
+    var j = str2Size
+    while i > 0 && j > 0 {
+        if str[str.index(str.startIndex, offsetBy: i - 1)] == str2[str2.index(str2.startIndex, offsetBy: j - 1)] {
+            lcs = String(str[str.index(str.startIndex, offsetBy: i - 1)]) + lcs
+            i -= 1
+            j -= 1
+        } else if dp[i - 1][j] > dp[i][j - 1] {
+            i -= 1
+        } else {
+            j -= 1
+        }
+    }
+    
+    print("longest common subsequence \(lcs)")
+    
+}
